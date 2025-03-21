@@ -60,7 +60,7 @@ const TermsAndConditionsPage: React.FC = () => {
       </div>
 
       {/* Scroll Down Indicator */}
-      <div className="relative bottom-20 left-1/2 transform -translate-x-1/2">
+      {/* <div className="relative bottom-20 left-1/2 transform -translate-x-1/2">
         <button className="text-white animate-bounce">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -77,7 +77,7 @@ const TermsAndConditionsPage: React.FC = () => {
             />
           </svg>
         </button>
-      </div>
+      </div> */}
     </div>
   );
 };

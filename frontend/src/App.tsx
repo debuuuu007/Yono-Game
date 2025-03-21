@@ -7,17 +7,18 @@ import Footer from './components/Footer';
 import About from './components/About';
 import T_C from './components/TermsAndConditionsPage';
 import ContactPage from './components/ContactPage';
+
 const App = () => {
   return (
     <Router>
+      <Header /> {/* Ensure Header is displayed on every page */}
       <div className="min-h-screen">
         <Routes>
-          <Route path="/" element={<><Header /><Home /></>} />
+          <Route path="/" element={<Home />} />
           <Route path="/games" element={<Games />} />
-          {/* <Route path="/login" element={<Login />} /> */}
-          <Route path="/about" element={<About/>}/>
-          <Route path='/contact' element={<ContactPage/>} />
-          <Route path='/T&C' element={<T_C/>} />
+          <Route path="/about" element={<About />} />
+          <Route path='/contact' element={<ContactPage />} />
+          <Route path='/T&C' element={<T_C />} />
           {/* Add other routes here */}
         </Routes>
         <Footer />

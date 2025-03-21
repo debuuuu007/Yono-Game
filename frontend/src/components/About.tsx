@@ -1,6 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import gameCoin from '../assets/game-coin.png';
+
 const About: React.FC = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0); // Reset scroll position to the top
+  }, []);
+
   return (
     <div
       className="min-h-screen relative overflow-hidden"
@@ -59,7 +64,7 @@ const About: React.FC = () => {
       </div>
 
       {/* Scroll Down Indicator */}
-      <div className="relative bottom-20 left-1/2 transform -translate-x-1/2">
+      {/* <div className="relative bottom-20 left-1/2 transform -translate-x-1/2">
         <button className="text-white animate-bounce">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -76,7 +81,7 @@ const About: React.FC = () => {
             />
           </svg>
         </button>
-      </div>
+      </div> */}
     </div>
  
   );

@@ -34,7 +34,7 @@ const Home = () => {
         <div className="flex flex-col md:flex-row items-center justify-between pt-20 md:pt-40">
           <div className="max-w-[872px] mb-8 md:mb-0">
             <h1 className="text-4xl md:text-7xl font-bold text-white mb-8 leading-tight" style={{ height: 'auto' }}>
-              Get Your<br />Game On
+              Get Your<br /> <span className='text-blue-400'>Game On</span>
             </h1>
             <GameCard />
             <div className="mt-8 flex justify-center md:justify-start">

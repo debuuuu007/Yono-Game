@@ -13,3 +13,6 @@
     background: linear-gradient(182.96deg, rgba(245, 63, 161, 0.3) -9.82%, rgba(245, 63, 161, 0) 117.56%);
   }
 }
+header {
+  background-color: transparent !important;
+}
