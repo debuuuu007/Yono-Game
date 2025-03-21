@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ChevronDown } from 'lucide-react';
 
 type Language = {
@@ -18,6 +19,7 @@ const languages: Language[] = [
 ];
 
 const Footer: React.FC = () => {
+  const navigate = useNavigate();
   const [selectedLanguage, setSelectedLanguage] = useState<Language>(languages[0]);
   const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
 
@@ -28,6 +30,21 @@ const Footer: React.FC = () => {
   const selectLanguage = (language: Language) => {
     setSelectedLanguage(language);
     setIsLanguageDropdownOpen(false);
+  };
+
+  const navigateToAbout = (event: React.MouseEvent) => {
+    event.preventDefault();
+    navigate('/About');
+  };
+
+  const navigateToContact = (event: React.MouseEvent) => {
+    event.preventDefault();
+    navigate('/Contact');
+  };
+
+  const navigateToT_C = (event: React.MouseEvent) => {
+    event.preventDefault();
+    navigate('/T&C');
   };
 
   return (
@@ -63,7 +80,7 @@ const Footer: React.FC = () => {
           </div>
 
           {/* Support Links */}
-          <div>
+          {/* <div>
             <h3 className="text-lg font-medium mb-4">Support</h3>
             <ul className="space-y-2">
               <li><a href="#" className="text-gray-300 hover:text-white">Privacy Policy</a></li>
@@ -71,16 +88,27 @@ const Footer: React.FC = () => {
               <li><a href="#" className="text-gray-300 hover:text-white">Support</a></li>
               <li><a href="#" className="text-gray-300 hover:text-white">FAQ</a></li>
             </ul>
-          </div>
+          </div> */}
 
           {/* Company Links */}
           <div>
             <h3 className="text-lg font-medium mb-4">Company</h3>
             <ul className="space-y-2">
-              <li><a href="#" className="text-gray-300 hover:text-white">About Us</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-white">Blog</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-white">Contact</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-white">Agriculture</a></li>
+              <li>
+                <a onClick={navigateToAbout} className="text-gray-300 hover:text-white">
+                  About Us
+                </a>
+              </li>
+              <li>
+                <a onClick={navigateToContact} className="text-gray-300 hover:text-white">
+                  Contact Us
+                </a>
+              </li>
+              <li>
+                <a onClick={navigateToT_C} className="text-gray-300 hover:text-white">
+                  T&C
+                </a>
+              </li>
             </ul>
           </div>
 
