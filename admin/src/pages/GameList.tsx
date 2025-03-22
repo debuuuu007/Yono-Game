@@ -1,15 +1,29 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Pencil,  ArrowLeft, Download } from 'lucide-react';
+import { Pencil, ArrowLeft, Download } from 'lucide-react';
+import axios from 'axios';
 
 export const GameList: React.FC = () => {
   const navigate = useNavigate();
-  
-  // Placeholder data - replace with actual data from backend
-  const games = Array(6).fill({
-    name: 'All Yono Games',
-    imageUrl: 'https://images.unsplash.com/photo-1541278107931-e006523892df?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3'
-  });
+  interface Game {
+    gameImage: string;
+    gameName: string;
+  }
+
+  const [games, setGames] = useState<Game[]>([]);
+
+  useEffect(() => {
+    const fetchGames = async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_BACKENDURL}/game/getgames`);
+        setGames(response.data);
+      } catch (error) {
+        console.error('Error fetching games:', error);
+      }
+    };
+
+    fetchGames();
+  }, []);
 
   return (
     <div className="max-w-2xl mx-auto">
@@ -29,11 +43,11 @@ export const GameList: React.FC = () => {
           <div key={index} className="bg-purple-900/50 rounded-xl p-4 flex items-center justify-between">
             <div className="flex items-center gap-4">
               <img 
-                src={game.imageUrl} 
-                alt={game.name} 
+                src={game.gameImage} 
+                alt={game.gameName} 
                 className="w-16 h-16 rounded-lg object-cover"
               />
-              <span className="text-white font-medium">{game.name}</span>
+              <span className="text-white font-medium">{game.gameName}</span>
             </div>
             
             <div className="flex gap-2">
@@ -48,11 +62,6 @@ export const GameList: React.FC = () => {
               >
                 <Download size={16} />
               </button>
-              {/* <button 
-                className="px-3 py-1 bg-orange-500 text-white rounded-full text-sm hover:bg-orange-600"
-              >
-                Back
-              </button> */}
             </div>
           </div>
         ))}

@@ -1,16 +1,28 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, Coins as Coin, Check, Copy } from 'lucide-react';
+import axios from 'axios';
 
 export const GenerateLanding: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { image, name } = location.state || {};
   const [downloadLink, setDownloadLink] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (downloadLink) {
-      setIsSuccess(true);
+      try {
+        await axios.post(`${import.meta.env.VITE_BACKENDURL}/game/addgame`, {
+          gameName: name,
+          gameImage: image,
+          gameLink: downloadLink,
+        });
+        setIsSuccess(true);
+      } catch (error) {
+        console.error('Error adding game:', error);
+      }
     }
   };
 
@@ -61,6 +73,9 @@ export const GenerateLanding: React.FC = () => {
           </div>
           <h1 className="text-3xl font-bold">Game On</h1>
         </div>
+
+        {image && <img src={image} alt="Game Preview" />}
+        {name && <h2>{name}</h2>}
 
         <input
           type="text"

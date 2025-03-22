@@ -7,6 +7,16 @@ export const AddGame: React.FC = () => {
   const [gameName, setGameName] = useState('');
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setImagePreview(event.target?.result as string);
+      };
+      reader.readAsDataURL(e.target.files[0]);
+    }
+  };
+
   return (
     <div className="max-w-md mx-auto">
       <div className="flex items-center justify-between mb-8">
@@ -20,7 +30,7 @@ export const AddGame: React.FC = () => {
       </div>
 
       <div className="flex flex-col items-center gap-8">
-        <div className="w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center cursor-pointer hover:bg-gray-300 transition-colors">
+        <label className="w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center cursor-pointer hover:bg-gray-300 transition-colors">
           {imagePreview ? (
             <img 
               src={imagePreview} 
@@ -33,7 +43,13 @@ export const AddGame: React.FC = () => {
               <span className="text-sm text-gray-500">Add Image</span>
             </div>
           )}
-        </div>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            className="hidden"
+          />
+        </label>
 
         <input
           type="text"
@@ -44,7 +60,7 @@ export const AddGame: React.FC = () => {
         />
 
         <button
-          onClick={() => navigate('/generate-landing')}
+          onClick={() => navigate('/generate-landing', { state: { image: imagePreview, name: gameName } })}
           className="w-full py-4 bg-yellow-400 hover:bg-yellow-500 text-white rounded-xl text-lg font-semibold transition-all transform hover:scale-105"
         >
           Next

@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Gamepad2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function Login() {
   const [state, setState] = useState<'Sign Up' | 'Login'>('Login');
@@ -9,33 +10,37 @@ function Login() {
   const [name, setName] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (event: React.FormEvent) => {
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/');
+    }
+  }, [isAuthenticated, navigate]);
+
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setErrorMessage('');
 
-    if (state === 'Sign Up') {
-      // Simulate sign-up by saving user data to local storage
-      const user = { name, email, password };
-      localStorage.setItem('user', JSON.stringify(user));
-      localStorage.setItem('isAuthenticated', 'true');
-      alert('Sign up successful! Please log in.');
-      setState('Login'); // Switch to login after sign-up
-    } else {
-      // Simulate login by checking local storage
-      const storedUser = localStorage.getItem('user');
-      if (storedUser) {
-        const user = JSON.parse(storedUser);
-        if (user.email === email && user.password === password) {
-          localStorage.setItem('isAuthenticated', 'true');
-          navigate('/'); // Redirect to home
-        } else {
-          setErrorMessage('Invalid email or password.');
+    try {
+      if (state === 'Sign Up') {
+        // Call backend register route
+        const response = await axios.post(`${import.meta.env.VITE_BACKENDURL}/admin/register`, { fullname: name, email, password });
+        if (response.status === 201) {
+          alert('Sign up successful! Please log in.');
+          setState('Login'); // Switch to login after sign-up
         }
       } else {
-        setErrorMessage('No user found. Please sign up.');
+        // Call backend login route
+        const response = await axios.post(`${import.meta.env.VITE_BACKENDURL}/admin/login`, { email, password });
+        if (response.status === 200) {
+          setIsAuthenticated(true);
+          localStorage.setItem('isAuthenticated', 'true');
+        }
       }
+    } catch (error: any) {
+      setErrorMessage(error.response?.data?.errors?.[0]?.msg || 'An error occurred');
     }
   };
 
