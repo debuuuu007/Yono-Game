@@ -1,7 +1,30 @@
-import React from 'react';
-import { cardsData } from '../assets/assets';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+
+interface CardData {
+  _id: string;
+  gameImage: string;
+  gameName: string;
+  gameLink: string;
+}
 
 const Games: React.FC = () => {
+  const [cardsData, setCardsData] = useState<CardData[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_BACKENDURL}/game/getgames`);
+        setCardsData(response.data);
+        console.log('Fetched cards data:', response.data);
+      } catch (error) {
+        console.error('There was an error fetching the game data!', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <div 
       className="flex flex-col items-center justify-between pt-20" 
@@ -13,9 +36,9 @@ const Games: React.FC = () => {
       }}
     >
       <div className="grid grid-cols-4 gap-4 mt-8">
-        {cardsData.map((card) => (
+        {Array.isArray(cardsData) && cardsData.map((card) => (
           <div 
-            key={card.id} 
+            key={card._id} 
             className="flex flex-col items-center p-4 rounded-lg" 
             style={{ 
               background: 'linear-gradient(180deg, #000C34 0%, #000000 100%)', 
@@ -25,46 +48,10 @@ const Games: React.FC = () => {
               borderRadius: '16px'
             }}
           >
-            <img src={card.image} alt="Game Coin" className="w-24 h-24" />
-            <h3 className="text-white mt-2">{card.title}</h3>
-            <div className="flex items-center mt-2">
-              <img src={card.giftImage} alt="Gift" className="w-4 h-4 mr-2" />
-              <p 
-                className="text-white" 
-                style={{ 
-                  fontFamily: 'Roboto', 
-                  fontWeight: 700, 
-                  fontSize: '10px', 
-                  lineHeight: '11.72px', 
-                  letterSpacing: '1px', 
-                  color: 'rgba(174, 255, 0, 1)', 
-                  width: '112px', 
-                  height: '12px'
-                }}
-              >
-                {card.bonus}
-              </p>
-            </div>
-            <div className="flex items-center mt-2">
-              <img src={card.dollarImage} alt="Dollar" className="w-4 h-4 mr-2" />
-              <p 
-                className="text-white" 
-                style={{ 
-                  fontFamily: 'Roboto', 
-                  fontWeight: 700, 
-                  fontSize: '10px', 
-                  lineHeight: '11.72px', 
-                  letterSpacing: '1px', 
-                  color: 'rgba(174, 255, 0, 1)', 
-                  width: '112px', 
-                  height: '12px'
-                }}
-              >
-                {card.minWithdraw}
-              </p>
-            </div>
+            <img src={card.gameImage} alt="Game Coin" className="w-24 h-24" />
+            <h3 className="text-white mt-2">{card.gameName}</h3>
             <a 
-              href={card.downloadLink} 
+              href={card.gameLink} 
               className="mt-4 px-4 py-2 rounded-lg" 
               style={{ 
                 width: '141px', 
@@ -96,7 +83,6 @@ const Games: React.FC = () => {
           </div>
         ))}
       </div>
-    
     </div>
   );
 };
